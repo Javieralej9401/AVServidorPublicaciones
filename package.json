@@ -1,0 +1,20 @@
+{
+  "name": "aulavirtual",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": ">= 0.0.1",
+    "body-parser": "~1.12.3",
+    "mysql" : ">= 1.0",
+    "socket.io" : ">= 1.0"
+  },
+  "description": "Servidor de la aplicacion aula virtual",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EJC software solutions",
+  "license": "ISC"
+}
