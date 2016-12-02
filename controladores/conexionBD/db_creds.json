@@ -1,0 +1,7 @@
+{
+	"host":  "67.222.138.106", 
+	"user":  "ejcsoftw_aulavir" , 
+	"pass":  "mcthemc1455", 
+	"db": "ejcsoftw_aulavirtbd" , 
+	"port": 3306
+}
