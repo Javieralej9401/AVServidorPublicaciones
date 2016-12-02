@@ -19,7 +19,19 @@ var multipart = require('connect-multiparty');
 //Se establece la conexion a la base de datos ( con es global)
 //mysql es globlal
  mysql= require("./controladores/conexionBD");
-con= mysql.nueva_conexion_bd('localhost', 'root','','aulavirtBD',3306);
+ creds = require("./controladores/conexionBD/db_creds.json");
+var con =  {};
+
+try{
+  
+  con= mysql.nueva_conexion_bd(creds.host,  creds.user, creds.pass, creds.db, creds.port);
+  mysql.conectar_bd(con);
+}catch(err){
+  console.log("Error al conectarse");
+  console.log(err);
+  return;
+}
+
 // Configuration
 app.configure(function(){
    // app.use(connect.bodyParser());
