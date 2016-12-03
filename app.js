@@ -67,8 +67,8 @@ app.use(menurecursos);
 app.use(retos);
 
 
-
-app.listen(3000, function(){
+var port =  process.env.PORT || 3000;
+app.listen(port, function(){
   console.log("Se ha iniciado el servidor en el puerto %d en modo %s", app.address().port, app.settings.env);
 });
 
