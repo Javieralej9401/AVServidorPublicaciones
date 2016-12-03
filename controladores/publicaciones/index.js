@@ -15,7 +15,7 @@ app.delete('/publicaciones/:id', post.borrarPost );
 //Rutas de los grupo de Usuarios
 
 app.get('/GrupoUsuario/:id_grupo', post.GrupoUsuario );
-app.get('/GrupoUsuario/Publicacion_likes/:id_post', post.UsuariosLikes);
+app.get('/GrupoUsuario/publicacion_likes/:id_post', post.UsuariosLikes);
 
 
 //io es una variable global, esta definida en app.js
@@ -84,7 +84,7 @@ io.on('connection', function (socket) {
 
       /*========== Enviar post modificado a los miembros del grupo + resultado de la accion ===========*/
 
-      var consulta="INSERT into Publicacion_likes(id_publicacion,id_usuario) values('"+ datos.id+"'"+", '"+ datos.id_usuario+"')";
+      var consulta="INSERT into publicacion_likes(id_publicacion,id_usuario) values('"+ datos.id+"'"+", '"+ datos.id_usuario+"')";
 
         console.log(consulta);
 

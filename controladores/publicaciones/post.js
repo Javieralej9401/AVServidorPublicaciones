@@ -41,7 +41,7 @@ exports.postsDeUnGrupo = function(request, response) {
 
   
 
-  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos, DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora ,u.id as id_usuario, u.login from publicacion p inner join Usuario u on p.id_usuario=u.id where p.id_grupo="+request.params.id_grupo +" order by p.fecha desc limit "+ request.params.CantPostMostrados;
+  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos, DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora ,u.id as id_usuario, u.login from publicacion p inner join usuario u on p.id_usuario=u.id where p.id_grupo="+request.params.id_grupo +" order by p.fecha desc limit "+ request.params.CantPostMostrados;
 
 
 
@@ -68,7 +68,7 @@ exports.postsDeUnGrupo = function(request, response) {
             };
             var ind= cond1.lastIndexOf("OR");
             cond1= cond1.slice(0,ind);
-            cond1+=" ) and id_usuario= '"+request.params.idUsuario_logeado+"'";
+            cond1+=" ) and id_usuario= '"+request.params.idusuario_logeado+"'";
             consulta2+=cond1;
 
             mysql.nueva_consulta(con,consulta2,null,function(rs2){
@@ -83,7 +83,7 @@ exports.postsDeUnGrupo = function(request, response) {
                               
                           };
 
-                          publicacion[i].likeUsuarioLogeado=b;
+                          publicacion[i].likeusuarioLogeado=b;
 
                     }
                     // console.log(publicacion);
@@ -108,7 +108,7 @@ exports.crearPost = function(request, response) {
 
    var consulta="INSERT INTO publicacion (id_usuario,id_grupo, titulo,contenido,likes,calidad,recursos) values('"+post.usuario.id_usuario+"','"+post.id_grupo+"','"+post.titulo+"','"+post.contenido+"','"+post.likes+"','"+post.calidad+"','"+post.recursos+"')";
    mysql.nueva_consulta(con,consulta,null,function(publicacion){
-         var consulta="SELECT  DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora, u.login as login from  publicacion p inner join Usuario u on p.id_usuario=u.id where u.id="+post.usuario.id_usuario+" and p.id="+publicacion.insertId;
+         var consulta="SELECT  DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora, u.login as login from  publicacion p inner join usuario u on p.id_usuario=u.id where u.id="+post.usuario.id_usuario+" and p.id="+publicacion.insertId;
            mysql.nueva_consulta(con,consulta,null,function(respuesta){
 
                 //Se anexa al json de respuesta los datos extras para que sea igual al modelo en el backend.
@@ -155,28 +155,28 @@ exports.borrarPost = function(request, response) {
 
 //Rutad e los grupos de usuarios
 
-exports.GrupoUsuario =function(request, response) {
+exports.Grupousuario =function(request, response) {
      var id_grupo = request.params.id_grupo;
    console.log("Intentando recuperar los usuarios de un grupo");
 
-          var consulta="SELECT  u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from Usuario u inner join GrupoEstudiante ge on u.id=ge.id_estudiante where ge.id_grupo="+id_grupo;
-       mysql.nueva_consulta(con,consulta,null,function(UsuariosG){
-          // console.log(UsuariosG);
-                response.send(UsuariosG);
+          var consulta="SELECT  u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from usuario u inner join grupoEstudiante ge on u.id=ge.id_estudiante where ge.id_grupo="+id_grupo;
+       mysql.nueva_consulta(con,consulta,null,function(usuariosG){
+          // console.log(usuariosG);
+                response.send(usuariosG);
         });
 
 }
-exports.UsuariosLikes =function(request, response) {
+exports.usuariosLikes =function(request, response) {
      var id_post = request.params.id_post;
    console.log("Intentando recuperar los usuarios likes");
 
-       var consulta="SELECT u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from `publicacion_likes` pl inner join Usuario u on pl.id_usuario=u.id where pl.id_publicacion="+id_post;
-       mysql.nueva_consulta(con,consulta,null,function(UsuariosLikes){
+       var consulta="SELECT u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from `publicacion_likes` pl inner join usuario u on pl.id_usuario=u.id where pl.id_publicacion="+id_post;
+       mysql.nueva_consulta(con,consulta,null,function(usuariosLikes){
           // var usuarios_likes={};
 
-          // usuarios_likes.usuarios_likes=UsuariosLikes;
-          // console.log(UsuariosLikes);
-                response.send(UsuariosLikes);
+          // usuarios_likes.usuarios_likes=usuariosLikes;
+          // console.log(usuariosLikes);
+                response.send(usuariosLikes);
         });
 
 }
