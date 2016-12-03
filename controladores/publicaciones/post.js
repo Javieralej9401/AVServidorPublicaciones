@@ -5,7 +5,7 @@
 
 exports.todosPosts = function(request, response) {
 console.log("Mostar todos");
-  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos,p.fecha, u.id as id_usuario, u.login from Publicacion p inner join Usuario u on p.id_usuario=u.id";
+  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos,p.fecha, u.id as id_usuario, u.login from publicacion p inner join usuario u on p.id_usuario=u.id";
    mysql.nueva_consulta(con,consulta,null,function(publicaciones){
         for (var i = 0; i < publicaciones.length; i++) {
          var usuario={"id_usuario": publicaciones[i].id_usuario, "login": publicaciones[i].login}; 
@@ -22,7 +22,7 @@ console.log("Mostar todos");
 }
 exports.unPost = function(request, response) {
   console.log("Se va a consultar por un solo post")
-  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos,p.fecha, u.id as id_usuario, u.login from Publicacion p inner join Usuario u on p.id_usuario=u.id where p.id="+request.params.id;
+  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos,p.fecha, u.id as id_usuario, u.login from publicacion p inner join usuario u on p.id_usuario=u.id where p.id="+request.params.id;
    mysql.nueva_consulta(con,consulta,null,function(publicacion){
 
          var usuario={"id_usuario": publicacion[0].id_usuario, "login": publicacion[0].login};
@@ -41,7 +41,7 @@ exports.postsDeUnGrupo = function(request, response) {
 
   
 
-  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos, DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora ,u.id as id_usuario, u.login from Publicacion p inner join Usuario u on p.id_usuario=u.id where p.id_grupo="+request.params.id_grupo +" order by p.fecha desc limit "+ request.params.CantPostMostrados;
+  var consulta="SELECT p.id as id, p.id_grupo, p.titulo, p.contenido,p.likes, p.calidad, p.recursos, DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora ,u.id as id_usuario, u.login from publicacion p inner join Usuario u on p.id_usuario=u.id where p.id_grupo="+request.params.id_grupo +" order by p.fecha desc limit "+ request.params.CantPostMostrados;
 
 
 
@@ -59,7 +59,7 @@ exports.postsDeUnGrupo = function(request, response) {
 
           };
 
-            var consulta2="select id_publicacion from Publicacion_likes where ";
+            var consulta2="select id_publicacion from publicacion_likes where ";
             var cond1= "(";
             for (var i = 0; i < publicacion.length; i++) {
               
@@ -106,9 +106,9 @@ exports.crearPost = function(request, response) {
    console.log("Intentando crear una nueva publicacion");
 
 
-   var consulta="INSERT INTO Publicacion (id_usuario,id_grupo, titulo,contenido,likes,calidad,recursos) values('"+post.usuario.id_usuario+"','"+post.id_grupo+"','"+post.titulo+"','"+post.contenido+"','"+post.likes+"','"+post.calidad+"','"+post.recursos+"')";
+   var consulta="INSERT INTO publicacion (id_usuario,id_grupo, titulo,contenido,likes,calidad,recursos) values('"+post.usuario.id_usuario+"','"+post.id_grupo+"','"+post.titulo+"','"+post.contenido+"','"+post.likes+"','"+post.calidad+"','"+post.recursos+"')";
    mysql.nueva_consulta(con,consulta,null,function(publicacion){
-         var consulta="SELECT  DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora, u.login as login from  Publicacion p inner join Usuario u on p.id_usuario=u.id where u.id="+post.usuario.id_usuario+" and p.id="+publicacion.insertId;
+         var consulta="SELECT  DATE_FORMAT(p.fecha, '%d/%m/%Y') as fecha , DATE_FORMAT(p.fecha, '%h:%i %p') as hora, u.login as login from  publicacion p inner join Usuario u on p.id_usuario=u.id where u.id="+post.usuario.id_usuario+" and p.id="+publicacion.insertId;
            mysql.nueva_consulta(con,consulta,null,function(respuesta){
 
                 //Se anexa al json de respuesta los datos extras para que sea igual al modelo en el backend.
@@ -134,7 +134,7 @@ exports.actualizarPost = function(request, response) {
   console.log("Intentando actualizar una publicacion");
    var post = request.body;
 
-   var consulta="UPDATE Publicacion set id_usuario='"+post.usuario.id_usuario+"',titulo='"+post.titulo+"',contenido='"+post.contenido+"',likes='"+post.likes+"',calidad='"+post.calidad+"',recursos='"+post.recursos+"' where id="+post.id;
+   var consulta="UPDATE publicacion set id_usuario='"+post.usuario.id_usuario+"',titulo='"+post.titulo+"',contenido='"+post.contenido+"',likes='"+post.likes+"',calidad='"+post.calidad+"',recursos='"+post.recursos+"' where id="+post.id;
    mysql.nueva_consulta(con,consulta,null,function(publicaciones){
       response.send(post);
       // console.log(post);
@@ -144,7 +144,7 @@ exports.actualizarPost = function(request, response) {
 }
 exports.borrarPost = function(request, response) {
   console.log("Intentando eleimar una publicacion"+request.params.id);
-  var consulta="DELETE from Publicacion where id="+request.params.id;
+  var consulta="DELETE from publicacion where id="+request.params.id;
    mysql.nueva_consulta(con,consulta,null,function(publicacion){
       response.send({id:request.params.id});
       console.log("Eliminado con exito");
@@ -170,7 +170,7 @@ exports.UsuariosLikes =function(request, response) {
      var id_post = request.params.id_post;
    console.log("Intentando recuperar los usuarios likes");
 
-       var consulta="SELECT u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from `Publicacion_likes` pl inner join Usuario u on pl.id_usuario=u.id where pl.id_publicacion="+id_post;
+       var consulta="SELECT u.id, u.login, u.nombre, u.apellido, u.email, u.tlf, u.iddepartamento, u.idTipousuario from `publicacion_likes` pl inner join Usuario u on pl.id_usuario=u.id where pl.id_publicacion="+id_post;
        mysql.nueva_consulta(con,consulta,null,function(UsuariosLikes){
           // var usuarios_likes={};
 
