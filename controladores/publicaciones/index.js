@@ -22,7 +22,10 @@ app.get('/GrupoUsuario/publicacion_likes/:id_post', post.UsuariosLikes);
 io.on('connection', function (socket) {
   var maxPostDiarios=3;
 
+  if(!socket){return};
+  
   socket.on('conectar', function (datos) {
+
       var resultado = {};
       try {
           
