@@ -22,6 +22,13 @@ var multipart = require('connect-multiparty');
  creds = require("./controladores/conexionBD/db_creds.json");
  con =  {};
 
+creds = {
+  "host":  "localhost", 
+  "user":  "root" , 
+  "pass":  "", 
+  "db": "aulavirtbd" , 
+  "port": 3306
+}
 try{
   
   con= mysql.nueva_conexion_bd(creds.host,  creds.user, creds.pass, creds.db, creds.port);
